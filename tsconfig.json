@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "lib": [
+            "dom",
+            "es2015"
+        ],
+        "module": "commonjs",
+        "outDir": "./dist",
+        "target": "es5",
+        "noImplicitAny": true,
+        "types": [
+            "node",
+            "google-apps-script",
+            "google-apps-script-oauth2"
+        ],
+    },
+    "include": [
+        "src/**/*.ts",
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

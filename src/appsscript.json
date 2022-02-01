@@ -1,0 +1,23 @@
+{
+    "exceptionLogging": "STACKDRIVER",
+    "runtimeVersion": "V8",
+    "dependencies": {
+        "libraries": [
+            {
+                "userSymbol": "OAuth2",
+                "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+                "version": "33"
+            }
+        ]
+    },
+    "dataStudio": {
+        "name": "Eaglytics FB Ads Insights Connector",
+        "logoUrl": "logoUrl",
+        "company": "Eaglytics",
+        "companyUrl": "companyUrl",
+        "addonUrl": "addonUrl",
+        "supportUrl": "supportUrl",
+        "description": "description",
+        "sources": [""]
+    }
+}
