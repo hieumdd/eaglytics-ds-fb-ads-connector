@@ -13,7 +13,8 @@
         "types": [
             "node",
             "google-apps-script",
-            "google-apps-script-oauth2"
+            "google-apps-script-oauth2",
+            "moment"
         ],
     },
     "include": [
