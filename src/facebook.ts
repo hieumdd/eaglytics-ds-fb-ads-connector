@@ -3,11 +3,12 @@ const AUTHORIZATION_BASE_URL = `https://www.facebook.com/${API_VER}/dialog/oauth
 const TOKEN_URL = `https://graph.facebook.com/${API_VER}/oauth/access_token`;
 
 type FacebookConfig = {
+    accessToken: string;
     accountId: string;
-    metrics: string;
 };
 
 type InsightsOptions = {
+    accessToken: string;
     accountId: string;
     fields: string[];
     startDate: string;
@@ -45,7 +46,7 @@ const queryString = (key: string, value: string | number) => `${key}=${value}`;
 
 const buildInsightsURL = (options: InsightsOptions, after?: string) => {
     const params = [
-        queryString('access_token', getOAuthService().getAccessToken()),
+        queryString('access_token', options.accessToken),
         queryString('level', 'account'),
         queryString('fields', options.fields.join(',')),
         queryString('time_increment', 1),

@@ -1,6 +1,18 @@
+eval(
+    UrlFetchApp.fetch(
+        'https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js',
+    ).getContentText(),
+);
+
 const cc = DataStudioApp.createCommunityConnector();
 
 const isAdminUser = () => true;
+
+const getAuthType = () =>
+    cc
+        .newAuthTypeResponse()
+        .setAuthType(cc.AuthType.NONE)
+        .build();
 
 const getConfig = (request: GetConfigRequest): GetConfigResponse => {
     const config = cc.getConfig();
@@ -10,26 +22,17 @@ const getConfig = (request: GetConfigRequest): GetConfigResponse => {
         .setId('accountId')
         .setName('Facebook Ads Account ID');
 
-    metrics.reduce(
-        (acc, cur) =>
-            acc.addOption(
-                config
-                    .newOptionBuilder()
-                    .setLabel(cur)
-                    .setValue(cur),
-            ),
-        config
-            .newSelectMultiple()
-            .setId('metrics')
-            .setName('Metrics'),
-    );
+    config
+        .newTextInput()
+        .setId('accessToken')
+        .setName('Facebook Apps Access Token');
 
     config.setDateRangeRequired(true);
 
     return config.build();
 };
 
-const getFields = (dimensions: string[], metrics: string[]) => {
+const getFields = () => {
     const fields = cc.getFields();
     const types = cc.FieldType;
     const aggregations = cc.AggregationType;
@@ -57,36 +60,39 @@ const getFields = (dimensions: string[], metrics: string[]) => {
 const getSchema = (
     request: GetSchemaRequest<FacebookConfig>,
 ): GetSchemaResponse => {
-    const {
-        configParams: { metrics },
-    } = request;
-
     return {
-        schema: getFields(dimensions, metrics.split(',')).build(),
+        schema: getFields().build(),
     };
+};
+
+const getCachedData = (options: InsightsOptions): FacebookData[] => {
+    // let cacheUpdateNeeded = true;
+    const url = buildURL(options);
+    const cachedData = getFromCache(url);
+    const data = getInsights(options);
+    deleteFromCache(url);
+    putInCache(url, { data, options, updatedAt: moment().unix() });
+    return cachedData;
 };
 
 const getData = (request: GetDataRequest<FacebookConfig>): GetDataResponse => {
     const {
-        configParams: { accountId },
+        configParams: { accessToken, accountId },
         dateRange: { startDate, endDate },
-        fields,
     } = request;
 
-    const requestedFields = getFields(
-        dimensions,
-        fields.map(({ name }) => name),
-    ).forIds(
+    const requestedFields = getFields().forIds(
         request.fields.map((field) => {
             return field.name;
         }),
     );
 
-    const data = getInsights({
+    const data = getCachedData({
+        accessToken,
         accountId,
         startDate,
         endDate,
-        fields: fields.map(({ name }) => name),
+        fields: [...dimensions, ...metrics],
     });
 
     const rows = data.map((p) => ({
