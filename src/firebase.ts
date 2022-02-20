@@ -6,14 +6,16 @@ type FacebookCache = {
 
 const scriptProperties = PropertiesService.getScriptProperties();
 
-const getGCPSAKey = () => JSON.parse(scriptProperties.getProperty('GCP_SA_KEY'));
+const getGCPSAKey = () =>
+    JSON.parse(scriptProperties.getProperty('GCP_SA_KEY'));
 
 const SA_CREDS = getGCPSAKey();
 const SA_KEY = SA_CREDS['private_key'];
 const SA_EMAIL = SA_CREDS['client_email'];
 
-const FIREBASE_REALTIME_DB_BASE_URL = 'eaglytics-project-default-rtdb.firebaseio.com';
-const FIREBASE_REALTIME_DB_COLLECTION = '/ds-cache';
+const FIREBASE_REALTIME_DB_BASE_URL =
+    'eaglytics-project-default-rtdb.firebaseio.com';
+const FIREBASE_REALTIME_DB_COLLECTION = '/ds-cache/';
 
 const getFirebaseService = () => {
     return OAuth2.createService('FirebaseCache')
@@ -29,36 +31,36 @@ const getFirebaseService = () => {
         ]);
 };
 
-const firebaseCache = (method: string, url: string, data?: FacebookCache) => {
-    const options: any = {
+const firebaseCache = (
+    method: GoogleAppsScript.URL_Fetch.HttpMethod,
+    url: string,
+    data?: FacebookCache,
+) => {
+    const defaultOptions = {
         method,
         headers: {
             Authorization: 'Bearer ' + getFirebaseService().getAccessToken(),
         },
         contentType: 'application/json',
     };
-
-    if (method === 'put') {
-        options['payload'] = JSON.stringify(data);
-    }
+    const options = data
+        ? {
+              ...defaultOptions,
+              payload: JSON.stringify(data),
+          }
+        : defaultOptions;
 
     const res = UrlFetchApp.fetch(url, options);
 
-    if (method === 'get') {
-        const responseObject = JSON.parse(res.getContentText());
-        if (responseObject === null) {
-            return null;
-        } else {
-            return responseObject.data
-        }
-    }
+    return method === 'get' ? JSON.parse(res.getContentText()) : undefined;
 };
 
 const getFromCache = (url: string) => firebaseCache('get', url);
 
 const deleteFromCache = (url: string) => firebaseCache('delete', url);
 
-const putInCache = (url: string, data: FacebookCache) => firebaseCache('put', url, data);
+const putInCache = (url: string, data: FacebookCache) =>
+    firebaseCache('put', url, data);
 
 const buildURL = (options: InsightsOptions) => {
     return [

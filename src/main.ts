@@ -66,13 +66,17 @@ const getSchema = (
 };
 
 const getCachedData = (options: InsightsOptions): FacebookData[] => {
-    // let cacheUpdateNeeded = true;
     const url = buildURL(options);
     const cachedData = getFromCache(url);
-    const data = getInsights(options);
-    deleteFromCache(url);
-    putInCache(url, { data, options, updatedAt: moment().unix() });
-    return cachedData;
+
+    if (cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 12) {
+        return cachedData.data;
+    } else {
+        const data = getInsights(options);
+        deleteFromCache(url);
+        putInCache(url, { data, options, updatedAt: moment().unix() });
+        return data;
+    }
 };
 
 const getData = (request: GetDataRequest<FacebookConfig>): GetDataResponse => {
