@@ -35,19 +35,19 @@ const dimensions = [
     // 'campaign_id',
     // 'adset_id',
     // 'ad_id',
-    // 'campaign_name',
-    // 'adset_name',
-    // 'ad_name',
+    'campaign_name',
+    'adset_name',
+    'ad_name',
 ];
 
-const metrics = ['clicks', 'spend', 'impressions'];
+const metrics = ['clicks', 'spend', 'impressions', 'cpc', 'ctr'];
 
 const queryString = (key: string, value: string | number) => `${key}=${value}`;
 
 const buildInsightsURL = (options: InsightsOptions, after?: string) => {
     const params = [
         queryString('access_token', options.accessToken),
-        queryString('level', 'account'),
+        queryString('level', 'ad'),
         queryString('fields', options.fields.join(',')),
         queryString('time_increment', 1),
         queryString(
