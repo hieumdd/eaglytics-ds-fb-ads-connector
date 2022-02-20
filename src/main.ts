@@ -65,17 +65,34 @@ const getSchema = (
     };
 };
 
+const getCache = (url: string) => {
+    const cachedData = getFromCache(url);
+    return cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 12
+        ? cachedData
+        : undefined;
+};
+
 const getCachedData = (options: InsightsOptions): FacebookData[] => {
     const url = buildURL(options);
-    const cachedData = getFromCache(url);
+    const cachedData = getCache(url)
 
-    if (cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 12) {
+    if (cachedData) {
+        console.log('using cache');
         return cachedData.data;
     } else {
-        const data = getInsights(options);
-        deleteFromCache(url);
-        putInCache(url, { data, options, updatedAt: moment().unix() });
-        return data;
+        const lock = LockService.getUserLock();
+        lock.tryLock(5 * 60 * 1000);
+        if (lock.hasLock && !getCache(url)) {
+            console.log('using api');
+            const data = getInsights(options);
+            deleteFromCache(url);
+            putInCache(url, { data, options, updatedAt: moment().unix() });
+            lock.releaseLock();
+            return data;
+        } else {
+            lock.releaseLock();
+            return getCachedData(options);
+        }
     }
 };
 
