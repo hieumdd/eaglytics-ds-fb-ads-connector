@@ -72,7 +72,7 @@ const getSchema = (
 /** Get and validate Cache */
 const getCache = (url: string) => {
     const cachedData = getFromCache(url);
-    return cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 12
+    return cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 1
         ? cachedData
         : undefined;
 };
@@ -128,10 +128,9 @@ const getData = (request: GetDataRequest<FacebookConfig>): GetDataResponse => {
         date_start: moment(_data.date_start).format('YYYYMMDD'),
     }));
 
+    const fields = requestedFields.asArray();
     const rows = data.map((p) => ({
-        values: requestedFields
-            .asArray()
-            .reduce((acc, cur) => [...acc, p[cur.getId()]], []),
+        values: fields.reduce((acc, cur) => [...acc, p[cur.getId()]], []),
     }));
 
     return {
