@@ -31,6 +31,7 @@ const getFirebaseService = () => {
         ]);
 };
 
+/** Firebase interface */
 const firebaseCache = (
     method: GoogleAppsScript.URL_Fetch.HttpMethod,
     url: string,
@@ -62,7 +63,12 @@ const deleteFromCache = (url: string) => firebaseCache('delete', url);
 const putInCache = (url: string, data: FacebookCache) =>
     firebaseCache('put', url, data);
 
-const buildURL = (options: InsightsOptions) => {
+/**
+ * Build Key URL for firebase
+ * @param options InsightsOptions to be used as key
+ * @returns string
+ */
+const buildURL = (options: InsightsOptions): string => {
     return [
         'https://',
         FIREBASE_REALTIME_DB_BASE_URL,

@@ -1,3 +1,6 @@
+/**
+ * Get moment.js for easier date manipulation
+ */
 eval(
     UrlFetchApp.fetch(
         'https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js',
@@ -6,6 +9,7 @@ eval(
 
 const cc = DataStudioApp.createCommunityConnector();
 
+/** Development */
 const isAdminUser = () => true;
 
 const getAuthType = () =>
@@ -65,6 +69,7 @@ const getSchema = (
     };
 };
 
+/** Get and validate Cache */
 const getCache = (url: string) => {
     const cachedData = getFromCache(url);
     return cachedData && moment().unix() - cachedData.updatedAt <= 60 * 60 * 12
@@ -72,9 +77,10 @@ const getCache = (url: string) => {
         : undefined;
 };
 
+/** Get or refresh Cache */
 const getCachedData = (options: InsightsOptions): FacebookData[] => {
     const url = buildURL(options);
-    const cachedData = getCache(url)
+    const cachedData = getCache(url);
 
     if (cachedData) {
         console.log('using cache');

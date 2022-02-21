@@ -42,9 +42,16 @@ const dimensions = [
 
 const metrics = ['clicks', 'spend', 'impressions', 'cpc', 'ctr'];
 
-const queryString = (key: string, value: string | number) => `${key}=${value}`;
+const queryString = (key: string, value: string | number): string =>
+    `${key}=${value}`;
 
-const buildInsightsURL = (options: InsightsOptions, after?: string) => {
+/**
+ * Build Facebook API URL
+ * @param options InsightsOptions
+ * @param after Pagination
+ * @returns Insights URL
+ */
+const buildInsightsURL = (options: InsightsOptions, after?: string): string => {
     const params = [
         queryString('access_token', options.accessToken),
         queryString('level', 'ad'),
@@ -67,6 +74,12 @@ const buildInsightsURL = (options: InsightsOptions, after?: string) => {
     );
 };
 
+/**
+ * Recursive fetch data from Facebook API
+ * @param options InsightsOptions
+ * @param _after Pagination
+ * @returns Facebook Ads Insights Data
+ */
 const getInsights = (
     options: InsightsOptions,
     _after?: string,
