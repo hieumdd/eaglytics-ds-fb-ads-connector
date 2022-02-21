@@ -11,13 +11,17 @@
         ]
     },
     "dataStudio": {
-        "name": "Eaglytics FB Ads Insights Connector",
-        "logoUrl": "logoUrl",
+        "name": "Eaglytics FB Ads Insights",
+        "logoUrl": "https://i.imgur.com/WqMISXY.png",
         "company": "Eaglytics",
-        "companyUrl": "companyUrl",
-        "addonUrl": "addonUrl",
-        "supportUrl": "supportUrl",
-        "description": "description",
-        "sources": [""]
+        "companyUrl": "https://eaglytics-co.com/",
+        "addonUrl": "https://eaglytics-co.com/",
+        "supportUrl": "https://eaglytics-co.com/",
+        "privacyPolicyUrl": "https://eaglytics-co.com/",
+        "termsOfServiceUrl": "https://eaglytics-co.com/",
+        "description": "Facebook Ads Insights at your fingertips",
+        "shortDescription": "Facebook Ads Insights at your fingertips",
+        "feeType": ["FREE"],
+        "sources": ["FACEBOOK_ADS"]
     }
 }
