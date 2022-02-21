@@ -70,8 +70,8 @@ const metrics: FacebookMetrics[] = [
         type_: (type) => type.NUMBER,
         agg: (agg) => agg.SUM,
     },
-    { name: 'cpc', type_: (type) => type.NUMBER, agg: (agg) => agg.SUM },
-    { name: 'ctr', type_: (type) => type.NUMBER, agg: (agg) => agg.SUM },
+    { name: 'cpc', type_: (type) => type.NUMBER, agg: (agg) => agg.AVG },
+    { name: 'ctr', type_: (type) => type.NUMBER, agg: (agg) => agg.AVG },
 ];
 
 const queryString = (key: string, value: string | number): string =>
