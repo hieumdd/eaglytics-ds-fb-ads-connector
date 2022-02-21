@@ -1,6 +1,6 @@
-const API_VER = 'v12.0';
-const AUTHORIZATION_BASE_URL = `https://www.facebook.com/${API_VER}/dialog/oauth`;
-const TOKEN_URL = `https://graph.facebook.com/${API_VER}/oauth/access_token`;
+const API_VER = 'v13.0';
+// const AUTHORIZATION_BASE_URL = `https://www.facebook.com/${API_VER}/dialog/oauth`;
+// const TOKEN_URL = `https://graph.facebook.com/${API_VER}/oauth/access_token`;
 
 type FacebookConfig = {
     accessToken: string;
@@ -16,6 +16,7 @@ type InsightsOptions = {
 };
 
 type FacebookData = {
+    date_start: string;
     [key: string]: string | number;
 };
 
@@ -30,17 +31,48 @@ type FacebookInsightsRes = {
     };
 };
 
-const dimensions = [
-    'date_start',
-    // 'campaign_id',
-    // 'adset_id',
-    // 'ad_id',
-    'campaign_name',
-    'adset_name',
-    'ad_name',
+type FacebookDimension = {
+    name: string;
+    type_: (
+        type: GoogleAppsScript.Data_Studio.CommunityConnector['FieldType'],
+    ) => GoogleAppsScript.Data_Studio.FieldType;
+};
+
+type FacebookMetrics = FacebookDimension & {
+    agg: (
+        agg: GoogleAppsScript.Data_Studio.CommunityConnector['AggregationType'],
+    ) => GoogleAppsScript.Data_Studio.AggregationType;
+};
+
+const dimensions: FacebookDimension[] = [
+    { name: 'date_start', type_: (type) => type.YEAR_MONTH_DAY },
+    // {name: 'campaign_id', type: cc.FieldType.NUMBER},
+    // {name: 'adset_id', type: cc.FieldType.NUMBER},
+    // {name: 'ad_id', type: cc.FieldType.NUMBER},
+    { name: 'campaign_name', type_: (type) => type.TEXT },
+    { name: 'adset_name', type_: (type) => type.TEXT },
+    { name: 'ad_name', type_: (type) => type.TEXT },
 ];
 
-const metrics = ['clicks', 'spend', 'impressions', 'cpc', 'ctr'];
+const metrics: FacebookMetrics[] = [
+    {
+        name: 'clicks',
+        type_: (type) => type.NUMBER,
+        agg: (agg) => agg.SUM,
+    },
+    {
+        name: 'spend',
+        type_: (type) => type.NUMBER,
+        agg: (agg) => agg.SUM,
+    },
+    {
+        name: 'impressions',
+        type_: (type) => type.NUMBER,
+        agg: (agg) => agg.SUM,
+    },
+    { name: 'cpc', type_: (type) => type.NUMBER, agg: (agg) => agg.SUM },
+    { name: 'ctr', type_: (type) => type.NUMBER, agg: (agg) => agg.SUM },
+];
 
 const queryString = (key: string, value: string | number): string =>
     `${key}=${value}`;

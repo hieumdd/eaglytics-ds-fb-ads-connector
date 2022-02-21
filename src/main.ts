@@ -41,21 +41,21 @@ const getFields = () => {
     const types = cc.FieldType;
     const aggregations = cc.AggregationType;
 
-    dimensions.forEach((key) =>
+    dimensions.forEach(({ name, type_ }) =>
         fields
             .newDimension()
-            .setId(key)
-            .setName(key)
-            .setType(types.TEXT),
+            .setId(name)
+            .setName(name)
+            .setType(type_(types)),
     );
 
-    metrics.forEach((key) =>
+    metrics.forEach(({ name, type_, agg }) =>
         fields
             .newMetric()
-            .setId(key)
-            .setName(key)
-            .setType(types.NUMBER)
-            .setAggregation(aggregations.SUM),
+            .setId(name)
+            .setName(name)
+            .setType(type_(types))
+            .setAggregation(agg(aggregations)),
     );
 
     return fields;
@@ -114,13 +114,19 @@ const getData = (request: GetDataRequest<FacebookConfig>): GetDataResponse => {
         }),
     );
 
-    const data = getCachedData({
+    const data: FacebookData[] = getCachedData({
         accessToken,
         accountId,
         startDate,
         endDate,
-        fields: [...dimensions, ...metrics],
-    });
+        fields: [
+            ...dimensions.map(({ name }) => name),
+            ...metrics.map(({ name }) => name),
+        ],
+    }).map((_data) => ({
+        ..._data,
+        date_start: moment(_data.date_start).format('YYYYMMDD'),
+    }));
 
     const rows = data.map((p) => ({
         values: requestedFields
