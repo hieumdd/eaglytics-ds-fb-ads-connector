@@ -129,3 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 684007477344-ea8cb1205476.json
+
+test.txt
