@@ -22,6 +22,9 @@
         "description": "Facebook Ads Insights at your fingertips",
         "shortDescription": "Facebook Ads Insights at your fingertips",
         "feeType": ["FREE"],
-        "sources": ["FACEBOOK_ADS"]
+        "sources": ["FACEBOOK_ADS"],
+        "templates": {
+            "default": "2eada1cf-6438-4112-99c8-27aa76359a9d"
+        }
     }
 }
