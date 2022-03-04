@@ -26,5 +26,10 @@
         "templates": {
             "default": "2eada1cf-6438-4112-99c8-27aa76359a9d"
         }
-    }
+    },
+    "oauthScopes": [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/firebase.database",
+        "https://www.googleapis.com/auth/script.external_request"
+    ]
 }
