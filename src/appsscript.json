@@ -2,13 +2,7 @@
     "exceptionLogging": "STACKDRIVER",
     "runtimeVersion": "V8",
     "dependencies": {
-        "libraries": [
-            {
-                "userSymbol": "OAuth2",
-                "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
-                "version": "33"
-            }
-        ]
+        "libraries": []
     },
     "dataStudio": {
         "name": "Eaglytics FB Ads Insights",
@@ -27,9 +21,5 @@
             "default": "2eada1cf-6438-4112-99c8-27aa76359a9d"
         }
     },
-    "oauthScopes": [
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/firebase.database",
-        "https://www.googleapis.com/auth/script.external_request"
-    ]
+    "oauthScopes": ["https://www.googleapis.com/auth/script.external_request"]
 }

@@ -4,32 +4,9 @@ type FacebookCache = {
     updatedAt: number;
 };
 
-const scriptProperties = PropertiesService.getScriptProperties();
-
-const getGCPSAKey = () =>
-    JSON.parse(scriptProperties.getProperty('GCP_SA_KEY'));
-
-const SA_CREDS = getGCPSAKey();
-const SA_KEY = SA_CREDS['private_key'];
-const SA_EMAIL = SA_CREDS['client_email'];
-
 const FIREBASE_REALTIME_DB_BASE_URL =
     'eaglytics-project-default-rtdb.firebaseio.com';
 const FIREBASE_REALTIME_DB_COLLECTION = '/ds-cache/';
-
-const getFirebaseService = () => {
-    return OAuth2.createService('FirebaseCache')
-        .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
-        .setTokenUrl('https://accounts.google.com/o/oauth2/token')
-        .setPrivateKey(SA_KEY)
-        .setIssuer(SA_EMAIL)
-        .setPropertyStore(scriptProperties)
-        .setCache(CacheService.getScriptCache())
-        .setScope([
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/firebase.database',
-        ]);
-};
 
 /** Firebase interface */
 const firebaseCache = (
@@ -39,9 +16,6 @@ const firebaseCache = (
 ) => {
     const defaultOptions = {
         method,
-        headers: {
-            Authorization: 'Bearer ' + getFirebaseService().getAccessToken(),
-        },
         contentType: 'application/json',
     };
     const options = data

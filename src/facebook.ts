@@ -1,6 +1,4 @@
 const API_VER = 'v13.0';
-// const AUTHORIZATION_BASE_URL = `https://www.facebook.com/${API_VER}/dialog/oauth`;
-// const TOKEN_URL = `https://graph.facebook.com/${API_VER}/oauth/access_token`;
 
 type FacebookConfig = {
     accessToken: string;
@@ -46,9 +44,6 @@ type FacebookMetrics = FacebookDimension & {
 
 const dimensions: FacebookDimension[] = [
     { name: 'date_start', type_: (type) => type.YEAR_MONTH_DAY },
-    // {name: 'campaign_id', type: cc.FieldType.NUMBER},
-    // {name: 'adset_id', type: cc.FieldType.NUMBER},
-    // {name: 'ad_id', type: cc.FieldType.NUMBER},
     { name: 'campaign_name', type_: (type) => type.TEXT },
     { name: 'adset_name', type_: (type) => type.TEXT },
     { name: 'ad_name', type_: (type) => type.TEXT },
